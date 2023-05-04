@@ -13,10 +13,10 @@ class Module:
         self.append = append
         self.name = name
         self.title = title or " ".join(map(str.title, self.name.split(".")[1:]))
-        self.automodule_options = automodule_options or list()
+        self.automodule_options = automodule_options or []
 
     def __repr__(self):
-        return "<{} ({})>".format(self.title, self.name)
+        return f"<{self.title} ({self.name})>"
 
     def asdict(self):
         return {
@@ -62,13 +62,13 @@ for name in sorted(dir(bonobo)):
     family_override = None
 
     for prefix, target in prefixes.items():
-        if modname == prefix or modname.startswith(prefix + "."):
+        if modname == prefix or modname.startswith(f"{prefix}."):
             family = target or prefix
             display_name = ".".join([family, name])
             break
 
     if family is None:
-        raise Exception("Could not find family for {}".format(name))
+        raise Exception(f"Could not find family for {name}")
 
     api_objects.setdefault(family, [])
     api_objects[family].append((name, o))
@@ -78,28 +78,27 @@ current_family = None
 for family, title in display_order:
     if family != current_family:
         if current_family is not None:
-            api_content.append("")
-            api_content.append("")
-        api_content.append(title)
-        api_content.append(":" * len(title))
-        api_content.append("")
+            api_content.extend(("", ""))
+        api_content.extend((title, ":" * len(title), ""))
         current_family = family
 
     for api_object in sorted(api_objects[family]):
         object_type = "func" if inspect.isfunction(api_object[1]) else "class"
-        api_content.append("* :{}:`{}.{}` ".format(object_type, family, api_object[0]))
+        api_content.append(f"* :{object_type}:`{family}.{api_object[0]}` ")
 
     if family == "bonobo":
         for api_object in sorted(api_objects[family]):
             object_type = "function" if inspect.isfunction(api_object[1]) else "class"
-            api_content.append("")
-            api_content.append("")
-            api_content.append(api_object[0])
-            api_content.append("-" * len(api_object[0]))
-            api_content.append("")
-            api_content.append(".. auto{}:: {}.{}".format(object_type, family, api_object[0]))
-
-
+            api_content.extend(
+                (
+                    "",
+                    "",
+                    api_object[0],
+                    "-" * len(api_object[0]),
+                    "",
+                    f".. auto{object_type}:: {family}.{api_object[0]}",
+                )
+            )
 print("\n".join(api_content))
 
 modules = [

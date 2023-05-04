@@ -99,11 +99,9 @@ _inspect_formats = {"graph": _inspect_as_graph}
 
 @api.register_graph
 def inspect(graph, *, plugins=None, services=None, strategy=None, format):
-    if not format in _inspect_formats:
+    if format not in _inspect_formats:
         raise NotImplementedError(
-            "Output format {} not implemented. Choices are: {}.".format(
-                format, ", ".join(sorted(_inspect_formats.keys()))
-            )
+            f'Output format {format} not implemented. Choices are: {", ".join(sorted(_inspect_formats.keys()))}.'
         )
     print(_inspect_formats[format](graph))
 

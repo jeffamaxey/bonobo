@@ -19,7 +19,7 @@ class DownloadCommand(BaseCommand):
         with _open_url(EXAMPLES_BASE_URL + examples_path) as response, open(output_path, "wb") as fout:
             for chunk in response.iter_content(io.DEFAULT_BUFFER_SIZE):
                 fout.write(chunk)
-        self.logger.info("Download saved to {}".format(output_path))
+        self.logger.info(f"Download saved to {output_path}")
 
     def add_arguments(self, parser):
         parser.add_argument("path", help="The relative path of the thing to download.")
@@ -29,5 +29,5 @@ def _open_url(url):
     """Open a HTTP connection to the URL and return a file-like object."""
     response = requests.get(url, stream=True)
     if response.status_code != 200:
-        raise IOError("Unable to download {}, HTTP {}".format(url, response.status_code))
+        raise IOError(f"Unable to download {url}, HTTP {response.status_code}")
     return response

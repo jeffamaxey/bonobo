@@ -38,7 +38,7 @@ def get_credentials(*, scopes):
         flow.user_agent = "Bonobo ETL (https://www.bonobo-project.org/)"
         flags = argparser.parse_args(["--noauth_local_webserver"])
         credentials = tools.run_flow(flow, store, flags)
-        print("Storing credentials to " + credential_path)
+        print(f"Storing credentials to {credential_path}")
     return credentials
 
 

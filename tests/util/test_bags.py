@@ -157,7 +157,12 @@ class TestBagType(unittest.TestCase):
         self.assertEqual(Dot(1)._fields, ("d",))
 
         n = 5000 if sys.version_info >= (3, 7) else 254
-        names = list(set("".join([choice(string.ascii_letters) for j in range(10)]) for i in range(n)))
+        names = list(
+            {
+                "".join([choice(string.ascii_letters) for _ in range(10)])
+                for _ in range(n)
+            }
+        )
         n = len(names)
         Big = BagType("Big", names)
         b = Big(*range(n))

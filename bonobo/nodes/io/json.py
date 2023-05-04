@@ -59,9 +59,7 @@ class JsonWriter(JsonHandler, FileWriter):
         :param row:
         """
         context.setdefault("lineno", 0)
-        fields = context.get_input_fields()
-
-        if fields:
+        if fields := context.get_input_fields():
             prefix = self.eol if context.lineno else ""
             self._write_line(file, prefix + json.dumps(OrderedDict(zip(fields, args))))
             context.lineno += 1

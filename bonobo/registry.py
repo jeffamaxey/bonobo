@@ -40,7 +40,7 @@ class Registry:
     }
 
     def get_factory_for(self, kind, name, *, format=None):
-        if not kind in self.FACTORIES:
+        if kind not in self.FACTORIES:
             raise KeyError("Unknown factory kind {!r}.".format(kind))
 
         if format is None and name is None:
@@ -60,7 +60,7 @@ class Registry:
         if format in self.ALIASES:
             format = self.ALIASES[format]
 
-        if format is None or not format in self.FACTORIES[kind]:
+        if format is None or format not in self.FACTORIES[kind]:
             raise RuntimeError(
                 "Could not resolve {kind} factory for {name} ({format}).".format(kind=kind, name=name, format=format)
             )

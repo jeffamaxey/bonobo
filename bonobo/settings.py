@@ -9,11 +9,7 @@ def to_bool(s):
         return False
     if isinstance(s, bool):
         return s
-    if len(s):
-        if s.lower() in ("f", "false", "n", "no", "0"):
-            return False
-        return True
-    return False
+    return s.lower() not in ("f", "false", "n", "no", "0") if len(s) else False
 
 
 class Setting:

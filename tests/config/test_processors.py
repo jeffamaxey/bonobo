@@ -15,7 +15,7 @@ class CP1(Configurable):
 
     @ContextProcessor
     def b(self, a):
-        yield a.upper()[:-1] + "b"
+        yield f"{a.upper()[:-1]}b"
 
     def __call__(self, a, b):
         return a, b

@@ -23,11 +23,10 @@ def _with_length_check(f):
     def _wrapped(*args, length=None, **kwargs):
         nonlocal f
         result = f(*args, **kwargs)
-        if length is not None:
-            if length != len(result):
-                raise TypeError(
-                    "Length check failed, expected {} fields but got {}: {!r}.".format(length, len(result), result)
-                )
+        if length is not None and length != len(result):
+            raise TypeError(
+                "Length check failed, expected {} fields but got {}: {!r}.".format(length, len(result), result)
+            )
         return result
 
     return _wrapped
@@ -115,7 +114,4 @@ def coalesce(*values):
 
     if not len(values):
         raise ValueError("Cannot coalesce an empty list of arguments.")
-    for value in values:
-        if value is not None:
-            return value
-    return None
+    return next((value for value in values if value is not None), None)

@@ -17,7 +17,7 @@ class ExamplesCommand(BaseCommand):
         print("You can run the following examples:")
         print()
         for example in all_examples:
-            print("  $ python -m bonobo.examples.{}".format(example))
+            print(f"  $ python -m bonobo.examples.{example}")
         print()
 
     def add_arguments(self, parser):

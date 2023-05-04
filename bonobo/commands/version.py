@@ -17,9 +17,9 @@ def get_versions(*, all=False, quiet=None):
                     try:
                         yield _format_version(mod, name=name, quiet=quiet)
                     except Exception as exc:
-                        yield "{} ({})".format(name, exc)
+                        yield f"{name} ({exc})"
                 except ImportError as exc:
-                    yield "{} is not importable ({}).".format(name, exc)
+                    yield f"{name} is not importable ({exc})."
 
 
 class VersionCommand(BaseCommand):

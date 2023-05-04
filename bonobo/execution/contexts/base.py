@@ -66,9 +66,7 @@ class Lifecycle:
             return "!"
         if not self.started:
             return " "
-        if not self.stopped:
-            return "+"
-        return "-"
+        return "-" if self.stopped else "+"
 
     def __enter__(self):
         self.start()
@@ -82,19 +80,19 @@ class Lifecycle:
             return term.red("[defunct]")
         if self.killed:
             return term.lightred("[killed]")
-        if self.stopped:
-            return term.lightblack("[done]")
-        return ""
+        return term.lightblack("[done]") if self.stopped else ""
 
     def start(self):
         if self.started:
-            raise RuntimeError("This context is already started ({}).".format(get_name(self)))
+            raise RuntimeError(f"This context is already started ({get_name(self)}).")
 
         self._started = True
 
     def stop(self):
         if not self.started:
-            raise RuntimeError("This context cannot be stopped as it never started ({}).".format(get_name(self)))
+            raise RuntimeError(
+                f"This context cannot be stopped as it never started ({get_name(self)})."
+            )
 
         self._stopped = True
 
@@ -138,6 +136,4 @@ class BaseContext(Lifecycle, Wrapper):
         """
         UNIX-like exit status, only coherent if the context has stopped.
         """
-        if self._defunct:
-            return 70
-        return 0
+        return 70 if self._defunct else 0

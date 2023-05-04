@@ -29,7 +29,7 @@ def load_env_from_file(filename):
     Read an env file into a collection of (name, value) tuples.
     """
     if not os.path.exists(filename):
-        raise FileNotFoundError("Environment file {} does not exist.".format(filename))
+        raise FileNotFoundError(f"Environment file {filename} does not exist.")
 
     with open(filename) as f:
         for lineno, line in enumerate(f):
@@ -37,7 +37,9 @@ def load_env_from_file(filename):
             if not line or line.startswith("#"):
                 continue
             if "=" not in line:
-                raise SyntaxError("Invalid environment file syntax in {} at line {}.".format(filename, lineno + 1))
+                raise SyntaxError(
+                    f"Invalid environment file syntax in {filename} at line {lineno + 1}."
+                )
 
             name, value = parse_var(line)
 
@@ -119,29 +121,29 @@ def parse_args(mixed=None):
     try:
         # Set default environment
         for name, value in map(parse_var, options.pop("default_env", []) or []):
-            if not name in os.environ:
-                if not name in _backup:
+            if name not in os.environ:
+                if name not in _backup:
                     _backup[name] = os.environ.get(name, None)
                 os.environ[name] = value
 
         # Read and set default environment from file(s)
         for filename in options.pop("default_env_file", []) or []:
             for name, value in load_env_from_file(filename):
-                if not name in os.environ:
-                    if not name in _backup:
+                if name not in os.environ:
+                    if name not in _backup:
                         _backup[name] = os.environ.get(name, None)
                     os.environ[name] = value
 
         # Read and set environment from file(s)
         for filename in options.pop("env_file", []) or []:
             for name, value in load_env_from_file(filename):
-                if not name in _backup:
+                if name not in _backup:
                     _backup[name] = os.environ.get(name, None)
                 os.environ[name] = value
 
         # Set environment
         for name, value in map(parse_var, options.pop("env", []) or []):
-            if not name in _backup:
+            if name not in _backup:
                 _backup[name] = os.environ.get(name, None)
             os.environ[name] = value
 

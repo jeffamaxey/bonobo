@@ -14,7 +14,7 @@ def square(i):
 
 
 def results(f, context):
-    results = yield list()
+    results = yield []
     context.parent.results = results
 
 

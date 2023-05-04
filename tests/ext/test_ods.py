@@ -12,9 +12,8 @@ class ResponseMock:
     def json(self):
         if self.count:
             return {}
-        else:
-            self.count += 1
-            return {"records": self.json_value}
+        self.count += 1
+        return {"records": self.json_value}
 
 
 def test_read_from_opendatasoft_api():

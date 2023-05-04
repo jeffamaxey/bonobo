@@ -68,9 +68,7 @@ class Container(dict):
         if len(args) == 1:
             if len(kwargs):
                 raise ValueError(
-                    "You can either use {} with one positional argument or with keyword arguments, not both.".format(
-                        cls.__name__
-                    )
+                    f"You can either use {cls.__name__} with one positional argument or with keyword arguments, not both."
                 )
             if not args[0]:
                 return super().__new__(cls)
@@ -87,7 +85,7 @@ class Container(dict):
         return {name: option.resolve(mixed, self) for name, option in options.items() if isinstance(option, Service)}
 
     def get(self, name, default=None):
-        if not name in self:
+        if name not in self:
             if default:
                 return default
             raise MissingServiceImplementationError(
@@ -113,12 +111,12 @@ def create_container(services=None, factory=Container):
     """
     container = factory(services) if services else factory()
 
-    if not "fs" in container:
+    if "fs" not in container:
         import bonobo
 
         container.setdefault("fs", bonobo.open_fs())
 
-    if not "http" in container:
+    if "http" not in container:
         import requests
 
         container.setdefault("http", requests)
@@ -154,7 +152,7 @@ class Exclusive(ContextDecorator):
     def get_lock(self):
         _id = id(self._wrapped)
         with Exclusive._locks_creation_lock:
-            if not _id in Exclusive._locks:
+            if _id not in Exclusive._locks:
                 Exclusive._locks[_id] = threading.RLock()
         return Exclusive._locks[_id]
 

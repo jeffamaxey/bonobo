@@ -71,7 +71,7 @@ def Tee(f):
 
 def _shorten(s, w):
     if w and len(s) > w:
-        s = s[0 : w - 3] + "..."
+        s = f"{s[:w - 3]}..."
     return s
 
 
@@ -305,7 +305,7 @@ def Format(**formats):
 
         if not context.output_type:
             fields = context.input_type._fields
-            newfields = tuple(field for field in formats if not field in fields)
+            newfields = tuple(field for field in formats if field not in fields)
             context.set_output_fields(fields + newfields)
 
         return tuple(

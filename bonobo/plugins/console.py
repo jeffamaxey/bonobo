@@ -70,8 +70,6 @@ class ConsoleOutputPlugin(Plugin):
     def tick(self, event):
         if self.isatty and not self.iswindows:
             self._write(event.context, rewind=True)
-        else:
-            pass  # not a tty, or windows, so we'll ignore stats output
 
     def teardown(self, event):
         self._write(event.context, rewind=False)
@@ -92,10 +90,10 @@ class ConsoleOutputPlugin(Plugin):
 
         for i in context.graph.topologically_sorted_indexes:
             node = context[i]
-            name_suffix = "({})".format(i) if settings.DEBUG.get() else ""
+            name_suffix = f"({i})" if settings.DEBUG.get() else ""
 
             liveliness_color = alive_color if node.alive else dead_color
-            liveliness_prefix = " {}{}{} ".format(liveliness_color, node.status, Style.RESET_ALL)
+            liveliness_prefix = f" {liveliness_color}{node.status}{Style.RESET_ALL} "
             _line = "".join(
                 (
                     liveliness_prefix,
@@ -117,7 +115,10 @@ class ConsoleOutputPlugin(Plugin):
                 "".join(
                     (
                         " `-> ",
-                        " ".join("{}{}{}: {}".format(Style.BRIGHT, k, Style.RESET_ALL, v) for k, v in append),
+                        " ".join(
+                            f"{Style.BRIGHT}{k}{Style.RESET_ALL}: {v}"
+                            for k, v in append
+                        ),
                         CLEAR_EOL,
                     )
                 ),

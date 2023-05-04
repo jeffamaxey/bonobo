@@ -33,10 +33,7 @@ def isconfigurabletype(mixed, *, strict=False):
     if isinstance(mixed, PartiallyConfigured):
         return True
 
-    if hasattr(mixed, "_partial") and mixed._partial:
-        return True
-
-    return False
+    return bool(hasattr(mixed, "_partial") and mixed._partial)
 
 
 def isoption(mixed):

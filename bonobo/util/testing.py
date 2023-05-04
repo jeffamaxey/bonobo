@@ -38,13 +38,13 @@ class FilesystemTester:
         self.mode = mode
 
     def get_services_for_reader(self, tmpdir):
-        fs, filename = open_fs(tmpdir), "input." + self.extension
+        fs, filename = open_fs(tmpdir), f"input.{self.extension}"
         with fs.open(filename, self.mode) as fp:
             fp.write(self.input_data)
         return fs, filename, {"fs": fs}
 
     def get_services_for_writer(self, tmpdir):
-        fs, filename = open_fs(tmpdir), "output." + self.extension
+        fs, filename = open_fs(tmpdir), f"output.{self.extension}"
         return fs, filename, {"fs": fs}
 
 
@@ -152,7 +152,7 @@ class EnvironmentTestCase:
     def run_environ(self, runner, *args, environ=None):
         _environ = {"PATH": "/usr/bin"}
         if environ:
-            _environ.update(environ)
+            _environ |= environ
 
         with patch.dict("os.environ", _environ, clear=True):
             out, err = self.run_quiet(runner, *args)

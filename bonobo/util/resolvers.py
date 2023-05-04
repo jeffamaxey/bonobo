@@ -24,7 +24,7 @@ class _ModulesRegistry(dict):
     def require(self, name):
         if name not in self:
             bits = name.split(".")
-            filename = os.path.join(self.pathname, *bits[:-1], bits[-1] + ".py")
+            filename = os.path.join(self.pathname, *bits[:-1], f"{bits[-1]}.py")
             self[name] = _RequiredModule(runpy.run_path(filename, run_name=name))
         return self[name]
 
@@ -56,9 +56,7 @@ def _resolve_options(options=None):
     :param options: tuple[str]
     :return: dict
     """
-    if options:
-        return dict(map(_parse_option, options))
-    return dict()
+    return dict(map(_parse_option, options)) if options else {}
 
 
 @cast(tuple)

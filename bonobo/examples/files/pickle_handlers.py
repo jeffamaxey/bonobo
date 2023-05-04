@@ -37,7 +37,7 @@ from bonobo import examples
 
 def cleanse_sms(category, sms):
     if category == "spam":
-        sms_clean = "**MARKED AS SPAM** " + sms[0:50] + ("..." if len(sms) > 50 else "")
+        sms_clean = f"**MARKED AS SPAM** {sms[:50]}" + ("..." if len(sms) > 50 else "")
     elif category == "ham":
         sms_clean = sms
     else:

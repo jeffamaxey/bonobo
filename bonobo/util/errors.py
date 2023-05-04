@@ -48,10 +48,19 @@ def sweeten_errors():
                 print(
                     f(
                         prefix,
-                        term.red_bg(term.bold(" " + type(exc).__name__ + " ")),
+                        term.red_bg(term.bold(f" {type(exc).__name__} ")),
                         " ",
                         w(arg_formatted),
-                        " " * (line_length - (arg_length + 3 + len(type(exc).__name__) + 2 * SPACES)),
+                        " "
+                        * (
+                            line_length
+                            - (
+                                arg_length
+                                + 3
+                                + len(type(exc).__name__)
+                                + 2 * SPACES
+                            )
+                        ),
                         suffix,
                     )
                 )

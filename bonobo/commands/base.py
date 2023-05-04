@@ -69,7 +69,7 @@ class BaseGraphCommand(BaseCommand):
 
     def do_handle(self, graph, **options):
         if not self.handler:
-            raise RuntimeError("{} has no handler defined.".format(get_name(self)))
+            raise RuntimeError(f"{get_name(self)} has no handler defined.")
         return self.handler(graph, **options)
 
     @contextmanager

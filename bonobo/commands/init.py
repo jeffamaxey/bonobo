@@ -26,7 +26,7 @@ class InitCommand(BaseCommand):
 
         loader = FileSystemLoader(self.TEMPLATES_PATH)
         env = Environment(loader=loader)
-        template = env.get_template(template_name + ".py-tpl")
+        template = env.get_template(f"{template_name}.py-tpl")
 
         with open(filename, "w+") as f:
             f.write(template.render(name=name))
@@ -50,20 +50,20 @@ class InitCommand(BaseCommand):
             os.path.join(os.getcwd(), filename, "Projectfile"), name=package_name, requirements=["bonobo"]
         )
 
-        self.logger.info('Generated "{}" package with medikit.'.format(package_name))
+        self.logger.info(f'Generated "{package_name}" package with medikit.')
         self.create_file_from_template(template="default", filename=os.path.join(filename, package_name, "__main__.py"))
 
         print(
             humanizer.Success(
-                'Package "{}" has been created.'.format(package_name),
+                f'Package "{package_name}" has been created.',
                 "",
                 "Install it...",
                 "",
-                "    $ `pip install --editable {}`".format(filename),
+                f"    $ `pip install --editable {filename}`",
                 "",
                 "Then maybe run the example...",
                 "",
-                "    $ `python -m {}`".format(package_name),
+                f"    $ `python -m {package_name}`",
                 "",
                 "Enjoy!",
             )

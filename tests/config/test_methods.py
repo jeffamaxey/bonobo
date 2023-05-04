@@ -64,7 +64,7 @@ def test_define_with_decorator():
     t = Concrete("foo", bar="baz")
 
     assert callable(t.handler)
-    assert len(calls) == 0
+    assert not calls
     t()
     assert len(calls) == 1
 
@@ -80,7 +80,7 @@ def test_late_binding_method_decoration():
     t = Concrete(bar="baz")
 
     assert callable(t.handler)
-    assert len(calls) == 0
+    assert not calls
     t()
     assert len(calls) == 1
 
@@ -93,7 +93,7 @@ def test_define_with_argument():
 
     t = MethodBasedConfigurable(concrete_handler, "foo", bar="baz")
     assert callable(t.handler)
-    assert len(calls) == 0
+    assert not calls
     t()
     assert len(calls) == 1
 
@@ -107,7 +107,7 @@ def test_define_with_inheritance():
 
     t = Inheriting("foo", bar="baz")
     assert callable(t.handler)
-    assert len(calls) == 0
+    assert not calls
     t()
     assert len(calls) == 1
 
@@ -125,6 +125,6 @@ def test_inheritance_then_decorate():
     assert callable(Concrete.handler)
     t = Concrete("foo", bar="baz")
     assert callable(t.handler)
-    assert len(calls) == 0
+    assert not calls
     t()
     assert len(calls) == 1

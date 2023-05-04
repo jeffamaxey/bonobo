@@ -4,11 +4,10 @@ from bonobo.util.testing import all_runners
 
 
 def test_entrypoint():
-    commands = {}
-
-    for command in pkg_resources.iter_entry_points("bonobo.commands"):
-        commands[command.name] = command
-
+    commands = {
+        command.name: command
+        for command in pkg_resources.iter_entry_points("bonobo.commands")
+    }
     assert not {"convert", "init", "inspect", "run", "version"}.difference(set(commands))
 
 

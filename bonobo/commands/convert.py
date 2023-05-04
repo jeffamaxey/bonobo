@@ -11,12 +11,12 @@ class ConvertCommand(BaseCommand):
         parser.add_argument("input_filename", help="Input filename.")
         parser.add_argument("output_filename", help="Output filename.")
         parser.add_argument(
-            "--" + READER,
+            f"--{READER}",
             "-r",
             help="Choose the reader factory if it cannot be detected from extension, or if detection is wrong.",
         )
         parser.add_argument(
-            "--" + WRITER,
+            f"--{WRITER}",
             "-w",
             help="Choose the writer factory if it cannot be detected from extension, or if detection is wrong (use - for console pretty print).",
         )
@@ -36,16 +36,16 @@ class ConvertCommand(BaseCommand):
             help='Add a named option to both reader and writer factories (i.e. foo="bar").',
         )
         parser.add_argument(
-            "--" + READER + "-option",
-            "-" + READER[0].upper(),
-            dest=READER + "_option",
+            f"--{READER}-option",
+            f"-{READER[0].upper()}",
+            dest=f"{READER}_option",
             action="append",
             help="Add a named option to the reader factory.",
         )
         parser.add_argument(
-            "--" + WRITER + "-option",
-            "-" + WRITER[0].upper(),
-            dest=WRITER + "_option",
+            f"--{WRITER}-option",
+            f"-{WRITER[0].upper()}",
+            dest=f"{WRITER}_option",
             action="append",
             help="Add a named option to the writer factory.",
         )

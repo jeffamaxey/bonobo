@@ -20,7 +20,7 @@ class CountTest(StaticNodeTest, TestCase):
 
     def test_manual_call(self):
         counter = ValueHolder(0)
-        for i in range(3):
+        for _ in range(3):
             self.call(counter)
         assert counter == 3
 
@@ -80,10 +80,7 @@ class LimitTest(ConfigurableNodeTest, TestCase):
 def test_tee():
     inner = MagicMock(side_effect=bonobo.identity)
     tee = bonobo.Tee(inner)
-    results = []
-    for i in range(10):
-        results.append(tee("foo"))
-
+    results = [tee("foo") for _ in range(10)]
     assert results == [NOT_MODIFIED] * 10
     assert len(inner.mock_calls) == 10
 

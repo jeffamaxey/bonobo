@@ -24,7 +24,7 @@ def extract():
 
 
 def transform(s):
-    return "{} ({})".format(s.title(), randint(10, 99))
+    return f"{s.title()} ({randint(10, 99)})"
 
 
 def load(s):

@@ -177,10 +177,6 @@ class NodeExecutionContext(BaseContext, WithStatistics):
         elif results:
             # Push data (returned value)
             self._put(self._cast(input_bag, results))
-        else:
-            # case with no result, an execution went through anyway, use for stats.
-            # self._exec_count += 1
-            pass
 
     def stop(self):
         """
@@ -353,9 +349,8 @@ class NodeExecutionContext(BaseContext, WithStatistics):
                     )
                 _output = _input + ensure_tuple(_output)
 
-        if not self._output_type:
-            if issubclass(type(_output), tuple):
-                self._output_type = type(_output)
+        if not self._output_type and issubclass(type(_output), tuple):
+            self._output_type = type(_output)
 
         return ensure_tuple(_output, cls=self._output_type)
 
@@ -446,11 +441,11 @@ def split_token(output):
     flags, i, len_output, data_allowed = set(), 0, len(output), True
     while i < len_output and isflag(output[i]):
         if output[i].must_be_first and i:
-            raise ValueError("{} flag must be first.".format(output[i]))
+            raise ValueError(f"{output[i]} flag must be first.")
         if i and output[i - 1].must_be_last:
-            raise ValueError("{} flag must be last.".format(output[i - 1]))
+            raise ValueError(f"{output[i - 1]} flag must be last.")
         if output[i] in flags:
-            raise ValueError("Duplicate flag {}.".format(output[i]))
+            raise ValueError(f"Duplicate flag {output[i]}.")
         flags.add(output[i])
         data_allowed &= output[i].allows_data
         i += 1

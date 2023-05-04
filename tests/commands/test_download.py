@@ -33,7 +33,7 @@ def test_download_works_for_examples(runner):
         mock_open_url.return_value = MockResponse()
         mock_open.return_value = fout
         runner("download", "examples/datasets/coffeeshops.txt")
-    expected_url = EXAMPLES_BASE_URL + "datasets/coffeeshops.txt"
+    expected_url = f"{EXAMPLES_BASE_URL}datasets/coffeeshops.txt"
     mock_open_url.assert_called_once_with(expected_url)
 
     assert fout.getvalue() == expected_bytes

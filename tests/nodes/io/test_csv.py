@@ -50,7 +50,12 @@ class CsvReaderTest(Csv, ReaderTest, TestCase):
 
     def check_output(self, context, *, prepend=None):
         out = context.get_buffer()
-        assert out == (prepend or list()) + [("1", "John Doe"), ("2", "Jane Doe"), ("", "DPR"), ("42", "Elon Musk")]
+        assert out == (prepend or []) + [
+            ("1", "John Doe"),
+            ("2", "Jane Doe"),
+            ("", "DPR"),
+            ("42", "Elon Musk"),
+        ]
 
     @incontext()
     def test_nofields(self, context):

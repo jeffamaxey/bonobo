@@ -70,7 +70,9 @@ class Input(Queue, Readable, Writable):
 
         # Check we are actually able to receive data.
         if self._writable_runlevel < 1:
-            raise InactiveWritableError("Cannot put() on an inactive {}.".format(Writable.__name__))
+            raise InactiveWritableError(
+                f"Cannot put() on an inactive {Writable.__name__}."
+            )
 
         if data == END:
             self._writable_runlevel -= 1
@@ -85,7 +87,9 @@ class Input(Queue, Readable, Writable):
 
     def get(self, block=True, timeout=None):
         if not self.alive:
-            raise InactiveReadableError("Cannot get() on an inactive {}.".format(Readable.__name__))
+            raise InactiveReadableError(
+                f"Cannot get() on an inactive {Readable.__name__}."
+            )
 
         data = Queue.get(self, block, timeout)
 
@@ -94,7 +98,7 @@ class Input(Queue, Readable, Writable):
 
             if not self.alive:
                 raise InactiveReadableError(
-                    "Cannot get() on an inactive {} (runlevel just reached 0).".format(Readable.__name__)
+                    f"Cannot get() on an inactive {Readable.__name__} (runlevel just reached 0)."
                 )
             return self.get(block, timeout)
 

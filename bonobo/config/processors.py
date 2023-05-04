@@ -53,7 +53,7 @@ class ContextProcessor(Option):
         self.name = self.__name__
 
     def __repr__(self):
-        return repr(self.func).replace("<function", "<{}".format(type(self).__name__))
+        return repr(self.func).replace("<function", f"<{type(self).__name__}")
 
     def __call__(self, *args, **kwargs):
         return self.func(*args, **kwargs)
@@ -97,7 +97,7 @@ class ContextCurrifier:
         if not callable(self.wrapped):
             if isinstance(self.wrapped, Iterable):
                 return self.__iter__()
-            raise UnrecoverableTypeError("Uncallable node {}".format(self.wrapped))
+            raise UnrecoverableTypeError(f"Uncallable node {self.wrapped}")
         try:
             bound = self._bind(_input)
         except TypeError as exc:
@@ -118,7 +118,7 @@ class ContextCurrifier:
         if self._stack is not None:
             raise RuntimeError("Cannot setup context currification twice.")
 
-        self._stack, self._stack_values = list(), list()
+        self._stack, self._stack_values = [], []
         for processor in resolve_processors(self.wrapped):
             _processed = processor(self.wrapped, *context, *self.args, **self.kwargs)
             _append_to_context = next(_processed)

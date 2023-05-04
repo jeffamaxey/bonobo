@@ -162,7 +162,7 @@ class Graph:
         """
         idx_or_node = self.index_of(idx_or_node)
 
-        if create and not idx_or_node in self.edges:
+        if create and idx_or_node not in self.edges:
             self.edges[idx_or_node] = set()
         return self.edges[idx_or_node]
 
@@ -237,7 +237,7 @@ class Graph:
                 raise RuntimeError("Using add_chain(...) without nodes does not allow to use the _name parameter.")
 
         for i, node in enumerate(nodes):
-            _last = get_node(node, _name=_name if not i else None)
+            _last = get_node(node, _name=None if i else _name)
 
             if _first is None:
                 _first = _last
@@ -324,9 +324,9 @@ class Graph:
 
     def _repr_html_(self):
         try:
-            return "<div>{}</div><pre>{}</pre>".format(self.graphviz._repr_svg_(), html.escape(repr(self)))
+            return f"<div>{self.graphviz._repr_svg_()}</div><pre>{html.escape(repr(self))}</pre>"
         except (ExecutableNotFound, FileNotFoundError) as exc:
-            return "<strong>{}</strong>: {}".format(type(exc).__name__, str(exc))
+            return f"<strong>{type(exc).__name__}</strong>: {str(exc)}"
 
 
 def _get_graphviz_node_id(graph, i):

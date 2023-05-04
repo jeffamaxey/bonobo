@@ -30,21 +30,27 @@ class BaseGraphExecutionContext(BaseContext):
 
     @property
     def started(self):
-        if not len(self.nodes):
-            return super(BaseGraphExecutionContext, self).started
-        return any(node.started for node in self.nodes)
+        return (
+            any(node.started for node in self.nodes)
+            if len(self.nodes)
+            else super(BaseGraphExecutionContext, self).started
+        )
 
     @property
     def stopped(self):
-        if not len(self.nodes):
-            return super(BaseGraphExecutionContext, self).stopped
-        return all(node.started and node.stopped for node in self.nodes)
+        return (
+            all(node.started and node.stopped for node in self.nodes)
+            if len(self.nodes)
+            else super(BaseGraphExecutionContext, self).stopped
+        )
 
     @property
     def alive(self):
-        if not len(self.nodes):
-            return super(BaseGraphExecutionContext, self).alive
-        return any(node.alive for node in self.nodes)
+        return (
+            any(node.alive for node in self.nodes)
+            if len(self.nodes)
+            else super(BaseGraphExecutionContext, self).alive
+        )
 
     @property
     def xstatus(self):
@@ -153,7 +159,7 @@ class GraphExecutionContext(BaseGraphExecutionContext):
                 self[i].write(message)
 
     def loop(self):
-        nodes = set(node for node in self.nodes if node.should_loop)
+        nodes = {node for node in self.nodes if node.should_loop}
         while self.should_loop and len(nodes):
             self.tick(pause=False)
             for node in list(nodes):

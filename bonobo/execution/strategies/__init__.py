@@ -45,7 +45,7 @@ def create_strategy(name=None):
         factory = STRATEGIES[name]
     except KeyError as exc:
         raise RuntimeError(
-            "Invalid strategy {}. Available choices: {}.".format(repr(name), ", ".join(sorted(STRATEGIES.keys())))
+            f'Invalid strategy {repr(name)}. Available choices: {", ".join(sorted(STRATEGIES.keys()))}.'
         ) from exc
 
     return factory()

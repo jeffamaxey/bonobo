@@ -35,4 +35,4 @@ class Timer:
         return self.__finish - self.__start
 
     def __str__(self):
-        return str(int(self.duration * 1000) / 1000.0) + "s"
+        return f"{str(int(self.duration * 1000) / 1000.0)}s"

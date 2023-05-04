@@ -30,7 +30,7 @@ def run(get_graph, get_services, *, parser=None):
 
     with bonobo.parse_args(parser) as options:
         with Timer() as timer:
-            print("Options:", " ".join("{}={}".format(k, v) for k, v in sorted(options.items())))
+            print("Options:", " ".join(f"{k}={v}" for k, v in sorted(options.items())))
             retval = bonobo.run(
                 get_graph(**get_graph_options(options)), services=get_services(), strategy=options["strategy"]
             )

@@ -108,13 +108,13 @@ def _uniquify(f):
 
 def _make_valid_attr_name(x):
     if iskeyword(x):
-        x = "_" + x
+        x = f"_{x}"
     if x.isidentifier():
         return x
     x = slugify(x, separator="_", regex_pattern=_slugify_allowed_chars_pattern)
     if x.isidentifier():
         return x
-    x = "_" + x
+    x = f"_{x}"
     if x.isidentifier():
         return x
     raise ValueError(x)
@@ -155,15 +155,23 @@ def BagType(typename, fields, *, verbose=False, module=None):
         num_fields=len(fields),
         arg_list=repr(attrs).replace("'", "")[1:-1],
         repr_fmt=", ".join(
-            ("%r" if isinstance(fields[index], int) else "{name}=%r").format(name=name)
+            ("%r" if isinstance(fields[index], int) else "{name}=%r").format(
+                name=name
+            )
             for index, name in enumerate(attrs)
         ),
         field_defs="\n".join(
             _field_template.format(
                 index=index,
                 name=name,
-                doc="Alias for "
-                + ("field #{}".format(index) if isinstance(fields[index], int) else repr(fields[index])),
+                doc=(
+                    "Alias for "
+                    + (
+                        f"field #{index}"
+                        if isinstance(fields[index], int)
+                        else repr(fields[index])
+                    )
+                ),
             )
             for index, name in enumerate(attrs)
         ),
@@ -171,7 +179,7 @@ def BagType(typename, fields, *, verbose=False, module=None):
 
     # Execute the template string in a temporary namespace and support
     # tracing utilities by setting a value for frame.f_globals['__name__']
-    namespace = dict(__name__="namedtuple_%s" % typename)
+    namespace = dict(__name__=f"namedtuple_{typename}")
     exec(class_definition, namespace)
     result = namespace[typename]
     result._source = class_definition

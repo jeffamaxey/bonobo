@@ -36,12 +36,15 @@ def _getlink(x):
 
 
 def normalize(row):
-    result = {
+    return {
         **row,
-        "links": list(filter(None, map(_getlink, json.loads(row.get("links"))))),
-        "country": pycountry.countries.get(alpha_2=row.get("country_code", "").upper()).name,
+        "links": list(
+            filter(None, map(_getlink, json.loads(row.get("links"))))
+        ),
+        "country": pycountry.countries.get(
+            alpha_2=row.get("country_code", "").upper()
+        ).name,
     }
-    return result
 
 
 def get_graph(graph=None, *, _limit=(), _print=()):

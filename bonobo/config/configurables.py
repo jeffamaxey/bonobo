@@ -31,7 +31,7 @@ class ConfigurableMeta(type):
                 if not value.name:
                     value.name = name
 
-                if not name in cls.__names:
+                if name not in cls.__names:
                     cls.__names.add(name)
                     cls.__options.insort((not value.positional, value._creation_counter, name, value))
 
@@ -40,11 +40,13 @@ class ConfigurableMeta(type):
         for _positional, _counter, _name, _value in cls.__options:
             _param = _name
             if _value.type:
-                _param = get_name(_value.type) + " " + _param
+                _param = f"{get_name(_value.type)} {_param}"
 
-            prefix = ":param {}: ".format(_param)
-            for lineno, line in enumerate((_value.__doc__ or "").split("\n")):
-                _options_doc.append((" " * len(prefix) if lineno else prefix) + line)
+            prefix = f":param {_param}: "
+            _options_doc.extend(
+                (" " * len(prefix) if lineno else prefix) + line
+                for lineno, line in enumerate((_value.__doc__ or "").split("\n"))
+            )
         cls.__doc__ = "\n\n".join(map(str.strip, filter(None, (cls.__doc__, "\n".join(_options_doc)))))
 
     @property
@@ -123,12 +125,11 @@ class Configurable(metaclass=ConfigurableMeta):
         :return: Configurable or PartiallyConfigured
         """
         options = tuple(cls.__options__)
-        # compute missing options, given the kwargs.
-        missing = set()
-        for name, option in options:
-            if option.required and not option.name in kwargs:
-                missing.add(name)
-
+        missing = {
+            name
+            for name, option in options
+            if option.required and option.name not in kwargs
+        }
         # transform positional arguments in keyword arguments if possible.
         position = 0
         for name, option in options:
@@ -149,12 +150,7 @@ class Configurable(metaclass=ConfigurableMeta):
         extraneous = set(kwargs.keys()) - (set(next(zip(*options))) if len(options) else set())
         if len(extraneous):
             raise TypeError(
-                "{}() got {} unexpected option{}: {}.".format(
-                    cls.__name__,
-                    len(extraneous),
-                    "s" if len(extraneous) > 1 else "",
-                    ", ".join(map(repr, sorted(extraneous))),
-                )
+                f'{cls.__name__}() got {len(extraneous)} unexpected option{"s" if len(extraneous) > 1 else ""}: {", ".join(map(repr, sorted(extraneous)))}.'
             )
 
         # missing options? we'll return a partial instance to finish the work later, unless we're required to be
@@ -162,12 +158,7 @@ class Configurable(metaclass=ConfigurableMeta):
         if len(missing):
             if _final:
                 raise TypeError(
-                    "{}() missing {} required option{}: {}.".format(
-                        cls.__name__,
-                        len(missing),
-                        "s" if len(missing) > 1 else "",
-                        ", ".join(map(repr, sorted(missing))),
-                    )
+                    f'{cls.__name__}() missing {len(missing)} required option{"s" if len(missing) > 1 else ""}: {", ".join(map(repr, sorted(missing)))}.'
                 )
             return PartiallyConfigured(cls, *args, **kwargs)
 
@@ -195,7 +186,7 @@ class Configurable(metaclass=ConfigurableMeta):
                 break
 
             if name in self._options_values:
-                raise ValueError("Already got a value for option {}".format(name))
+                raise ValueError(f"Already got a value for option {name}")
 
             setattr(self, name, args[position])
             position += 1

@@ -85,9 +85,7 @@ class AsyncThreadPoolExecutorStrategy(ThreadPoolExecutorStrategy):
     def __init__(self, GraphExecutionContextType=None):
         if not settings.ALPHA.get():
             raise NotImplementedError(
-                "{} is experimental, you need to explicitely activate it using ALPHA=True in system env.".format(
-                    get_name(self)
-                )
+                f"{get_name(self)} is experimental, you need to explicitely activate it using ALPHA=True in system env."
             )
         super().__init__(GraphExecutionContextType)
 

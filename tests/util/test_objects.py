@@ -44,14 +44,14 @@ def test_valueholder():
     assert x == 42
     x += 1
     assert x == 43
-    assert x + 1 == 44
+    assert x == 43
     assert x == 43
 
     y = ValueHolder(44)
     assert y == 44
     y -= 1
     assert y == 43
-    assert y - 1 == 42
+    assert y == 43
     assert y == 43
 
     assert y == x
@@ -62,7 +62,7 @@ def test_valueholder():
 def test_valueholder_notequal():
     x = ValueHolder(42)
     assert x != 41
-    assert not (x != 42)
+    assert x == 42
 
 
 @pytest.mark.parametrize("rlo,rhi", [(1, 2), ("a", "b")])

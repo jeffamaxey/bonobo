@@ -7,7 +7,7 @@ def filesystem_path(path: str):
             "File path should not be absolute. If you really need to provide absolute paths, then you must pass a "
             "filesystem instance that is bound to your filesystem root and provide a relative path from there."
         )
-    return str(path)
+    return path
 
 
 class FileHandler(Configurable):

@@ -79,7 +79,7 @@ class Option:
         if inst is None:
             return vars(type_).get(self.name, self)
 
-        if not self.name in inst._options_values:
+        if self.name not in inst._options_values:
             inst._options_values[self.name] = self.get_default()
 
         return inst._options_values[self.name]
@@ -90,7 +90,7 @@ class Option:
     def __repr__(self):
         return "<{positional}{typename} {type}{name} default={default!r}{required}>".format(
             typename=type(self).__name__,
-            type="({})".format(self.type) if istype(self.type) else "",
+            type=f"({self.type})" if istype(self.type) else "",
             name=self.name,
             positional="*" if self.positional else "**",
             default=self.default,
@@ -130,12 +130,12 @@ class RenamedOption(Option):
 
     def __get__(self, instance, owner):
         raise ValueError(
-            "Trying to get value from renamed option {}, try getting {} instead.".format(self.name, self.target)
+            f"Trying to get value from renamed option {self.name}, try getting {self.target} instead."
         )
 
     def clean(self, value):
         raise ValueError(
-            "Trying to set value of renamed option {}, try setting {} instead.".format(self.name, self.target)
+            f"Trying to set value of renamed option {self.name}, try setting {self.target} instead."
         )
 
 
